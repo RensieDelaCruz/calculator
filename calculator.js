@@ -11,6 +11,30 @@
 // Need to store the first number that is input into the calculator when a user presses an operator and save which operator has been chosen and then operate() when the user preesses "="
 // User should be able to chain operations, 12 + 7 - 5 * 3 = should yield 42
 
+let operator;
+let number1;
+let number2;
+let total;
+
+function operate(operator, num1, num2) {
+    switch (operator) {
+        case '+':
+            total = add(num1, num2);
+            return total;
+        case '-':
+            total = subtract(num1, num2);
+            return total;
+        case '*':
+            total = multiply(num1, num2);
+            return total;
+        case '/':
+            total = divide(num1, num2);
+            return total;
+    }
+
+}
+
+
 function add(num1, num2) {
     return num1 + num2;
 }
