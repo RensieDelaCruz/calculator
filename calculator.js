@@ -1,40 +1,76 @@
-// Create a Calculator that will accept an operators and input numbers
+let inputNum1 = null;
+let inputNum2 = null;
+let inputOperator = null;
+let total = null;
+const displayNumber = document.querySelector('.number-display');
+const displayOperator = document.querySelector('.operator-display');
+const numberButtons = document.querySelectorAll('.number-button');
+const operatorButtons = document.querySelectorAll('.operator-button');
 
-// User will input numbers and operators with the buttons
-// a function will accept the numbers and operator the process it and display the result
-// then store the result in a variable when the user press another operation
+// adding EventListener to all operator buttons
+operatorButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+        changeDisplay(button);
+    });
+});
 
+// adding an EventListener to all number buttons
+numberButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+        changeDisplay(button);
+    });
+});
 
-// Calculator should contain all basic math operation add, subtract and multiplication
-// Create a function operate() that takes an operator and 2 numbers and then call one of the above function on the numbers
-// Create a functions that will populate the display when you click the number buttons, should be storing the vaue in a variable somewhere to use later
-// Need to store the first number that is input into the calculator when a user presses an operator and save which operator has been chosen and then operate() when the user preesses "="
-// User should be able to chain operations, 12 + 7 - 5 * 3 = should yield 42
+// function that will take a button as a parameter update
+// the display in the display section
+function changeDisplay(button) {
+    buttonClass = button.getAttribute('class');
+    if (buttonClass === 'number-button') {
+        if (total === null) {
+            displayNumber.textContent += button.textContent;
+        } else {
+            displayNumber.textContent = '';
+            displayNumber.textContent += button.textContent;
+        }
+    } else if (buttonClass === 'operator-button') {
+        if (inputNum1 === null || inputOperator === null) {
+            inputNum1 = displayNumber.textContent;
+            displayNumber.textContent = '';
+        } else  {
+            inputNum2 = displayNumber.textContent;
+            operate(inputOperator, inputNum1, inputNum2);
+            displayNumber.textContent = total;
+            inputNum1 = total;
+        }
+        displayOperator.textContent = button.textContent;
+        inputOperator = displayOperator.textContent;
+    }
+}
 
-let operator;
-let number1;
-let number2;
-let total;
-
+// function to be called to perform the calculation
 function operate(operator, num1, num2) {
+    number1 = parseFloat(num1);
+    number2 = parseFloat(num2);
+
     switch (operator) {
         case '+':
-            total = add(num1, num2);
+            total = add(number1, number2);
             return total;
         case '-':
-            total = subtract(num1, num2);
+            total = subtract(number1, number2);
             return total;
-        case '*':
-            total = multiply(num1, num2);
+        case 'x':
+            total = multiply(number1, number2);
             return total;
         case '/':
-            total = divide(num1, num2);
+            total = divide(number1, number2);
             return total;
     }
 
 }
 
 
+// four basic math operations
 function add(num1, num2) {
     return num1 + num2;
 }
