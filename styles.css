@@ -33,6 +33,7 @@ body {
     border: 5px solid gray;
     border-radius: 5px;
     margin-bottom: 20px;
+    height: 70px;
 }
 
 /* buttons section */
@@ -59,7 +60,7 @@ button {
     width: 48%;
 }
 
-.operator-button {
+.operator-button, .equals-button {
     background-color: aqua;
 }
 
