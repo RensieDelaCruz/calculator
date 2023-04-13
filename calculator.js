@@ -7,6 +7,22 @@ const displayOperator = document.querySelector('.operator-display');
 const numberButtons = document.querySelectorAll('.number-button');
 const operatorButtons = document.querySelectorAll('.operator-button');
 const equalsButton = document.querySelector('.equals-button');
+const acButton = document.getElementById('ac');
+const pointButton = document.getElementById('point');
+
+pointButton.addEventListener('click', function(e){
+    if(displayNumber.textContent.includes('.')){
+        e.target.disabled = true;
+    }else{
+        displayNumber.textContent += e.target.textContent;
+        e.target.disabled = true;
+    }
+});
+
+// EventListener for All Clear Button
+acButton.addEventListener('click', function(e){
+    allClear();
+});
 
 // EventListener for all operator buttons
 operatorButtons.forEach((button) => {
@@ -36,11 +52,12 @@ function changeDisplay(button) {
         // right after pressing the equal button
         if (inputNum1 !== '' && inputOperator === null) {
             allClear();
-        } else if (inputNum1 !== '') {
+        } else if (inputNum2 === null) {
             // This will delete the display once the user enter 
             //  the next input in a chain calculation 
             // after displaying the result of the previous calculation
             displayNumber.textContent = '';
+            inputNum2 = '';
         }
 
         displayNumber.textContent += button.textContent;
@@ -51,6 +68,7 @@ function changeDisplay(button) {
             // this will assign the first input after pressing an operator button
             inputNum1 = displayNumber.textContent;
             displayNumber.textContent = '';
+            pointButton.disabled = false;
         } else {
             // this will assign the next input in a chain calculation after pressing an operator
             // and will display the result before the user enter the next input
@@ -58,7 +76,8 @@ function changeDisplay(button) {
             displayNumber.textContent = operate(inputOperator, inputNum1, inputNum2);
             inputOperator = button.textContent;
             inputNum1 = total;
-            inputNum2 = '';
+            inputNum2 = null;
+            pointButton.disabled = false;
         }
 
         displayOperator.textContent = button.textContent;
@@ -74,12 +93,13 @@ function changeDisplay(button) {
             displayOperator.textContent = button.textContent;
             displayNumber.textContent = total;
             inputNum1 = total;
-            inputNum2 = ''
+            inputNum2 = '';
             inputOperator = null;
+            pointButton.disabled = false;
         }
 
     }
-    
+
 }
 
 //This function will reset the whole calculator
@@ -90,6 +110,7 @@ function allClear() {
     inputNum2 = '';
     inputOperator = null;
     total = null;
+    pointButton.disabled = false;
 }
 
 // function to be called to perform the calculation
@@ -131,5 +152,9 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
-    return num1 / num2;
+    if (num2 === 0) {
+        return "Yikeees! ERRRROR!";
+    } else {
+        return num1 / num2;
+    }
 }
