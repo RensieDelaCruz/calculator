@@ -1,56 +1,103 @@
-let inputNum1 = null;
-let inputNum2 = null;
+let inputNum1 = '';
+let inputNum2 = '';
 let inputOperator = null;
 let total = null;
 const displayNumber = document.querySelector('.number-display');
 const displayOperator = document.querySelector('.operator-display');
 const numberButtons = document.querySelectorAll('.number-button');
 const operatorButtons = document.querySelectorAll('.operator-button');
+const equalsButton = document.querySelector('.equals-button');
 
-// adding EventListener to all operator buttons
+// EventListener for all operator buttons
 operatorButtons.forEach((button) => {
     button.addEventListener('click', function () {
         changeDisplay(button);
     });
 });
 
-// adding an EventListener to all number buttons
+// EventListener for all number buttons
 numberButtons.forEach((button) => {
     button.addEventListener('click', function () {
         changeDisplay(button);
     });
 });
 
-// function that will take a button as a parameter update
-// the display in the display section
+// Separate EventListener for "=" button
+equalsButton.addEventListener('click', function (e) {
+    changeDisplay(e.target);
+});
+
+// function that will change the display of the calculator based on the button that is clicked
 function changeDisplay(button) {
     buttonClass = button.getAttribute('class');
     if (buttonClass === 'number-button') {
-        if (total === null) {
-            displayNumber.textContent += button.textContent;
-        } else {
+
+        // This will reset the calculator if the user enter a number 
+        // right after pressing the equal button
+        if (inputNum1 !== '' && inputOperator === null) {
+            allClear();
+        } else if (inputNum1 !== '') {
+            // This will delete the display once the user enter 
+            //  the next input in a chain calculation 
+            // after displaying the result of the previous calculation
             displayNumber.textContent = '';
-            displayNumber.textContent += button.textContent;
         }
+
+        displayNumber.textContent += button.textContent;
+
     } else if (buttonClass === 'operator-button') {
-        if (inputNum1 === null || inputOperator === null) {
+
+        if (inputNum1 === '') {
+            // this will assign the first input after pressing an operator button
             inputNum1 = displayNumber.textContent;
             displayNumber.textContent = '';
-        } else  {
+        } else {
+            // this will assign the next input in a chain calculation after pressing an operator
+            // and will display the result before the user enter the next input
             inputNum2 = displayNumber.textContent;
-            operate(inputOperator, inputNum1, inputNum2);
-            displayNumber.textContent = total;
+            displayNumber.textContent = operate(inputOperator, inputNum1, inputNum2);
+            inputOperator = button.textContent;
             inputNum1 = total;
+            inputNum2 = '';
         }
+
         displayOperator.textContent = button.textContent;
         inputOperator = displayOperator.textContent;
+
+    } else if (buttonClass === 'equals-button') {
+        // this will assign the second input and will calculate for the result
+        // the result will be assigned to input number 1 
+        // so it will be ready just in case the user wants to do more calculation on the result
+        inputNum2 = displayNumber.textContent;
+        if (inputNum1 !== '' && inputNum2 !== '' && inputOperator !== null) {
+            operate(inputOperator, inputNum1, inputNum2);
+            displayOperator.textContent = button.textContent;
+            displayNumber.textContent = total;
+            inputNum1 = total;
+            inputNum2 = ''
+            inputOperator = null;
+        }
+
     }
+    
+}
+
+//This function will reset the whole calculator
+function allClear() {
+    displayNumber.textContent = '';
+    displayOperator.textContent = '';
+    inputNum1 = '';
+    inputNum2 = '';
+    inputOperator = null;
+    total = null;
 }
 
 // function to be called to perform the calculation
 function operate(operator, num1, num2) {
-    number1 = parseFloat(num1);
-    number2 = parseFloat(num2);
+    // when not used with boolean values, the logical OR 
+    //will return which expression evaluated to true
+    number1 = parseFloat(num1) || 0;
+    number2 = parseFloat(num2) || 0;
 
     switch (operator) {
         case '+':
