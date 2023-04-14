@@ -7,20 +7,23 @@ const displayOperator = document.querySelector('.operator-display');
 const numberButtons = document.querySelectorAll('.number-button');
 const operatorButtons = document.querySelectorAll('.operator-button');
 const equalsButton = document.querySelector('.equals-button');
-const acButton = document.getElementById('ac');
 const pointButton = document.getElementById('point');
+const acButton = document.getElementById('ac');
+const cButton = document.getElementById('c');
+const delButton = document.getElementById('del');
 
-pointButton.addEventListener('click', function(e){
-    if(displayNumber.textContent.includes('.')){
-        e.target.disabled = true;
-    }else{
-        displayNumber.textContent += e.target.textContent;
-        e.target.disabled = true;
-    }
+// EventListener for delButton
+delButton.addEventListener('click', function(){
+    backSpace();
+});
+
+// EventListener for cButton
+cButton.addEventListener('click', function () {
+    clearLast();
 });
 
 // EventListener for All Clear Button
-acButton.addEventListener('click', function(e){
+acButton.addEventListener('click', function () {
     allClear();
 });
 
@@ -29,6 +32,16 @@ operatorButtons.forEach((button) => {
     button.addEventListener('click', function () {
         changeDisplay(button);
     });
+});
+
+// EventListener for pointButton
+pointButton.addEventListener('click', function (e) {
+    if (displayNumber.textContent.includes('.')) {
+        e.target.disabled = true;
+    } else {
+        displayNumber.textContent += e.target.textContent;
+        e.target.disabled = true;
+    }
 });
 
 // EventListener for all number buttons
@@ -100,6 +113,26 @@ function changeDisplay(button) {
 
     }
 
+}
+
+// function that will allow user to delete individual characters when "DEL" button is clicked
+function backSpace() {
+    if (displayNumber !== '') {
+        displayNumber.textContent = displayNumber.textContent.substring(0, displayNumber.textContent.length - 1);
+    }
+}
+
+// A function that will erase the last number or operation entered once the "C" button is clicked
+function clearLast() {
+    if (displayNumber.textContent !== '') {
+        inputNum2 = '';
+        displayNumber.textContent = '';
+    } else if (inputOperator !== null || displayOperator.textContent !== '') {
+        inputOperator = null;
+        displayOperator.textContent = '';
+    } else if (inputNum1 !== '') {
+        inputNum1 = '';
+    }
 }
 
 //This function will reset the whole calculator
