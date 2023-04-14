@@ -87,7 +87,6 @@ function changeDisplay(button) {
             // and will display the result before the user enter the next input
             inputNum2 = displayNumber.textContent;
             displayNumber.textContent = operate(inputOperator, inputNum1, inputNum2);
-            inputOperator = button.textContent;
             inputNum1 = total;
             inputNum2 = null;
             pointButton.disabled = false;
